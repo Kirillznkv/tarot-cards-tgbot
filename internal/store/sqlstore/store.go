@@ -3,6 +3,7 @@ package sqlstore
 import (
 	"database/sql"
 	"github.com/Kirillznkv/tarot-cards-tgbot/internal/store"
+	"time"
 )
 
 type Store struct {
@@ -32,4 +33,24 @@ func (s *Store) Users() store.UserRepository {
 
 func (s *Store) Images() store.ImageRepository {
 	return s.imageRepository
+}
+
+func (s *Store) Error(id int64, err error) {
+	s.db.QueryRow(
+		"INSERT INTO errors (id_tg, date, time, error) values ($1, $2, $3, $4)",
+		id,
+		time.Now().UTC(),
+		time.Now(),
+		err.Error(),
+	)
+}
+
+func (s *Store) LogRequest(id int64, msg string) {
+	s.db.QueryRow(
+		"INSERT INTO info (id_tg, date, time, request) values ($1, $2, $3, $4)",
+		id,
+		time.Now().UTC(),
+		time.Now(),
+		msg,
+	)
 }

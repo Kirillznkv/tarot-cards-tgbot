@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"github.com/Kirillznkv/tarot-cards-tgbot/internal/constants"
 	"github.com/Kirillznkv/tarot-cards-tgbot/internal/model"
 	"github.com/Kirillznkv/tarot-cards-tgbot/internal/store"
@@ -43,17 +44,22 @@ func (s *Server) Start() {
 		if update.Message == nil {
 			continue
 		}
+		var msg tgbotapi.Chattable
+
 		id := update.Message.Chat.ID
 		_, ok := s.store.Users().FindByTgID(id)
 		if !ok {
-			msg := s.buildWelcomeMassage(id)
+			msg = s.buildWelcomeMassage(id)
+		} else {
+			msg = s.buildTarorMassage(id)
+		}
+
+		if msg != nil {
 			s.bot.Send(msg)
 		} else {
-			msg := s.buildTarorMassage(id)
-			if msg != nil {
-				s.bot.Send(msg)
-			}
+			s.error(id, errors.New("error send msg"))
 		}
+		s.logRequest(id, update.Message.Text)
 	}
 }
 
@@ -74,4 +80,12 @@ func (s *Server) buildTarorMassage(id int64) tgbotapi.Chattable {
 	}
 
 	return tgbotapi.NewMediaGroup(id, group.Images)
+}
+
+func (s *Server) logRequest(id int64, msg string) {
+	s.store.LogRequest(id, msg)
+}
+
+func (s *Server) error(id int64, err error) {
+	s.store.Error(id, err)
 }
