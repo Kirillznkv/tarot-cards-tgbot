@@ -11,27 +11,24 @@ type Store struct {
 }
 
 func New() *Store {
-	return &Store{}
+	s := &Store{}
+
+	s.userRepository = &UserRepository{
+		store: s,
+		users: make(map[int64]*model.User),
+	}
+	s.imageRepository = &ImageRepository{
+		store:  s,
+		images: make(map[string]*model.Image),
+	}
+
+	return s
 }
 
 func (s *Store) Users() store.UserRepository {
-	if s.userRepository == nil {
-		s.userRepository = &UserRepository{
-			store: s,
-			users: make(map[int64]*model.User),
-		}
-	}
-
 	return s.userRepository
 }
 
 func (s *Store) Images() store.ImageRepository {
-	if s.imageRepository == nil {
-		s.imageRepository = &ImageRepository{
-			store:  s,
-			images: make(map[string]*model.Image),
-		}
-	}
-
 	return s.imageRepository
 }

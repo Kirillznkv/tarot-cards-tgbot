@@ -19,7 +19,6 @@ func New(db *sql.DB) *Store {
 	s.userRepository = &UserRepository{
 		store: s,
 	}
-
 	s.imageRepository = &ImageRepository{
 		store: s,
 	}
@@ -28,21 +27,9 @@ func New(db *sql.DB) *Store {
 }
 
 func (s *Store) Users() store.UserRepository {
-	//if s.userRepository == nil {
-	//	s.userRepository = &UserRepository{
-	//		store: s,
-	//	}
-	//}
-
 	return s.userRepository
 }
 
 func (s *Store) Images() store.ImageRepository {
-	//if s.imageRepository == nil {
-	//	s.imageRepository = &ImageRepository{
-	//		store: s,
-	//	}
-	//}
-
 	return s.imageRepository
 }
