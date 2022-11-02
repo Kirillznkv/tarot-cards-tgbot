@@ -12,9 +12,10 @@ func TestImageRepository_AddImage(t *testing.T) {
 
 	s := New(db)
 	img := &model.Image{
-		Name:        "home",
-		URL:         "http://home.me",
-		Description: "Love home!",
+		Name:         "home",
+		URL:          "http://home.me",
+		Description1: "Love home!",
+		Description2: "Love home!",
 	}
 	assert.NoError(t, s.Images().AddImage(img))
 	assert.Error(t, s.Images().AddImage(img))
@@ -30,9 +31,10 @@ func TestImageRepository_Find(t *testing.T) {
 	assert.Equal(t, ok, false)
 
 	testImage := &model.Image{
-		Name:        "home",
-		URL:         "http://home.me",
-		Description: "Love home!",
+		Name:         "home",
+		URL:          "http://home.me",
+		Description1: "Love home!",
+		Description2: "Love home!",
 	}
 	assert.NoError(t, s.Images().AddImage(testImage))
 	img, ok = s.Images().FindByName("home")

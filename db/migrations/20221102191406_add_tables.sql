@@ -10,7 +10,8 @@ create table if not exists images (
     id bigserial not null primary key,
     name text not null unique,
     url text not null unique,
-    description text not null
+    description_1 text not null,
+    description_2 text not null
 );
 -- +goose StatementEnd
 

@@ -15,10 +15,11 @@ type ImageRepository struct {
 
 func (r *ImageRepository) AddImage(i *model.Image) error {
 	if err := r.store.db.QueryRow(
-		"INSERT INTO images (name, url, description) VALUES ($1, $2, $3) RETURNING id",
+		"INSERT INTO images (name, url, description_1, description_2) VALUES ($1, $2, $3, $4) RETURNING id",
 		i.Name,
 		i.URL,
-		i.Description,
+		i.Description1,
+		i.Description2,
 	).Scan(&i.Id); err != nil {
 		return err
 	}
@@ -30,13 +31,14 @@ func (r *ImageRepository) FindByName(name string) (*model.Image, bool) {
 	img := &model.Image{}
 
 	if err := r.store.db.QueryRow(
-		"SELECT id, name, url, description FROM images WHERE name = $1",
+		"SELECT id, name, url, description_1, description_2 FROM images WHERE name = $1",
 		name,
 	).Scan(
 		&img.Id,
 		&img.Name,
 		&img.URL,
-		&img.Description,
+		&img.Description1,
+		&img.Description2,
 	); err != nil {
 		return nil, false
 	}
@@ -70,13 +72,14 @@ func (r *ImageRepository) randomImage() (*model.Image, error) {
 
 	img := &model.Image{}
 	if err := r.store.db.QueryRow(
-		"SELECT id, name, url, description FROM images ORDER BY id LIMIT 1 OFFSET $1",
+		"SELECT id, name, url, description_1, description_2 FROM images ORDER BY id LIMIT 1 OFFSET $1",
 		idRand,
 	).Scan(
 		&img.Id,
 		&img.Name,
 		&img.URL,
-		&img.Description,
+		&img.Description1,
+		&img.Description2,
 	); err != nil {
 		return nil, err
 	}
@@ -115,7 +118,7 @@ func (r *ImageRepository) RandomImages() ([]*model.Image, error) {
 
 	text := ""
 	for _, img := range res {
-		text += fmt.Sprintf("%s:\n%s\n\n", img.Name, img.Description)
+		text += fmt.Sprintf("%s:\n🌝%s\n🌚%s\n\n", img.Name, img.Description1, img.Description2)
 	}
 	res[0].InputPhoto.Caption = text
 

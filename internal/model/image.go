@@ -3,11 +3,12 @@ package model
 import tgbotapi "github.com/Syfaro/telegram-bot-api"
 
 type Image struct {
-	Id          int
-	Name        string
-	URL         string
-	Description string
-	InputPhoto  tgbotapi.InputMediaPhoto
+	Id           int
+	Name         string
+	URL          string
+	Description1 string
+	Description2 string
+	InputPhoto   tgbotapi.InputMediaPhoto
 }
 
 func (i *Image) BeforeUse() {
