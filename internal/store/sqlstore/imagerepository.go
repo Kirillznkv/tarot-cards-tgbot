@@ -2,6 +2,7 @@ package sqlstore
 
 import (
 	"errors"
+	"fmt"
 	"github.com/Kirillznkv/tarot-cards-tgbot/internal/constants"
 	"github.com/Kirillznkv/tarot-cards-tgbot/internal/model"
 	"math/rand"
@@ -92,7 +93,7 @@ func (r *ImageRepository) RandomImages() ([]*model.Image, error) {
 	}
 	num := constants.NumImagesResponse
 
-	if num < 2 {
+	if num < 2 || num > 10 {
 		return nil, errors.New("invalid num images")
 	} else if num > numImages {
 		return nil, errors.New("num images less then images")
@@ -111,5 +112,12 @@ func (r *ImageRepository) RandomImages() ([]*model.Image, error) {
 			check[img.Name] = true
 		}
 	}
+
+	text := ""
+	for _, img := range res {
+		text += fmt.Sprintf("%s:\n%s\n\n", img.Name, img.Description)
+	}
+	res[0].InputPhoto.Caption = text
+
 	return res, nil
 }

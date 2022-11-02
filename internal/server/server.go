@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"github.com/Kirillznkv/tarot-cards-tgbot/internal/constants"
 	"github.com/Kirillznkv/tarot-cards-tgbot/internal/model"
 	"github.com/Kirillznkv/tarot-cards-tgbot/internal/store"
@@ -50,9 +49,8 @@ func (s *Server) Start() {
 			msg := s.buildWelcomeMassage(id)
 			s.bot.Send(msg)
 		} else {
-			img, msg := s.buildImageMassage(id)
-			if img != nil && msg != nil {
-				s.bot.Send(img)
+			msg := s.buildTarorMassage(id)
+			if msg != nil {
 				s.bot.Send(msg)
 			}
 		}
@@ -64,17 +62,16 @@ func (s *Server) buildWelcomeMassage(id int64) tgbotapi.Chattable {
 	return tgbotapi.NewMessage(id, constants.WelcomeMassage)
 }
 
-func (s *Server) buildImageMassage(id int64) (tgbotapi.Chattable, tgbotapi.Chattable) {
+func (s *Server) buildTarorMassage(id int64) tgbotapi.Chattable {
 	imgs, err := s.store.Images().RandomImages()
 	if err != nil {
-		return nil, nil //need log
+		return nil //need log
 	}
 
 	group := model.ImageGroup{}
 	for _, img := range imgs {
 		group.AddImage(img.InputPhoto)
-		group.Text += fmt.Sprintf("%s:\n%s\n\n", img.Name, img.Description)
 	}
 
-	return tgbotapi.NewMediaGroup(id, group.Images), tgbotapi.NewMessage(id, group.Text)
+	return tgbotapi.NewMediaGroup(id, group.Images)
 }

@@ -26,7 +26,7 @@ func TestUserRepository_Find(t *testing.T) {
 	assert.Equal(t, ok, false)
 
 	testUser := &model.User{IdTgbot: 1}
-	s.Users().AddUser(testUser)
+	assert.NoError(t, s.Users().AddUser(testUser))
 	u, ok = s.Users().FindByTgID(1)
 	assert.Equal(t, u, testUser)
 	assert.Equal(t, ok, true)

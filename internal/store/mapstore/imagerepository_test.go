@@ -29,7 +29,8 @@ func TestImageRepository_Find(t *testing.T) {
 		URL:         "http://home.me",
 		Description: "Love home!",
 	}
-	s.Images().AddImage(testImage)
+	err := s.Images().AddImage(testImage)
+	assert.NoError(t, err)
 	img, ok = s.Images().FindByName("home")
 	assert.Equal(t, img, testImage)
 	assert.Equal(t, ok, true)
