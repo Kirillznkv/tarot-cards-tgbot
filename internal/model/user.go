@@ -1,5 +1,6 @@
 package model
 
 type User struct {
-	ID int64
+	IdTgbot    int64
+	IdDatabase int
 }

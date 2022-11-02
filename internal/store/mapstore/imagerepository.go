@@ -2,10 +2,10 @@ package mapstore
 
 import (
 	"errors"
+	"github.com/Kirillznkv/tarot-cards-tgbot/internal/constants"
+	"github.com/Kirillznkv/tarot-cards-tgbot/internal/model"
+	"github.com/Kirillznkv/tarot-cards-tgbot/internal/store"
 	"math/rand"
-	"tarot-cards-tgbot/internal/constants"
-	"tarot-cards-tgbot/internal/model"
-	"tarot-cards-tgbot/internal/store"
 	"time"
 )
 
@@ -24,7 +24,7 @@ func (r *ImageRepository) AddImage(i *model.Image) error {
 	return nil
 }
 
-func (r *ImageRepository) Find(name string) (*model.Image, bool) {
+func (r *ImageRepository) FindByName(name string) (*model.Image, bool) {
 	image, ok := r.images[name]
 	return image, ok
 }
@@ -61,6 +61,7 @@ func (r *ImageRepository) RandomImages() ([]*model.Image, error) {
 
 		if check[img.Name] == false {
 			res = append(res, img)
+			check[img.Name] = true
 		}
 	}
 	return res, nil

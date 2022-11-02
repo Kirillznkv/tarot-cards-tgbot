@@ -3,6 +3,7 @@ package model
 import tgbotapi "github.com/Syfaro/telegram-bot-api"
 
 type Image struct {
+	Id          int
 	Name        string
 	URL         string
 	Description string

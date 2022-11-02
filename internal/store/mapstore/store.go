@@ -1,8 +1,8 @@
 package mapstore
 
 import (
-	"tarot-cards-tgbot/internal/model"
-	"tarot-cards-tgbot/internal/store"
+	"github.com/Kirillznkv/tarot-cards-tgbot/internal/model"
+	"github.com/Kirillznkv/tarot-cards-tgbot/internal/store"
 )
 
 type Store struct {

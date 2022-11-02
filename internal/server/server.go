@@ -2,11 +2,11 @@ package server
 
 import (
 	"fmt"
+	"github.com/Kirillznkv/tarot-cards-tgbot/internal/constants"
+	"github.com/Kirillznkv/tarot-cards-tgbot/internal/model"
+	"github.com/Kirillznkv/tarot-cards-tgbot/internal/store"
 	tgbotapi "github.com/Syfaro/telegram-bot-api"
 	"github.com/sirupsen/logrus"
-	"tarot-cards-tgbot/internal/constants"
-	"tarot-cards-tgbot/internal/model"
-	"tarot-cards-tgbot/internal/store"
 )
 
 type Server struct {
@@ -38,12 +38,14 @@ func (s *Server) Start() {
 	if err != nil {
 		panic(err)
 	}
+
+	s.logger.Info("bot started")
 	for update := range updates {
 		if update.Message == nil {
 			continue
 		}
 		id := update.Message.Chat.ID
-		_, ok := s.store.Users().Find(id)
+		_, ok := s.store.Users().FindByTgID(id)
 		if !ok {
 			msg := s.buildWelcomeMassage(id)
 			s.bot.Send(msg)
@@ -58,7 +60,7 @@ func (s *Server) Start() {
 }
 
 func (s *Server) buildWelcomeMassage(id int64) tgbotapi.Chattable {
-	s.store.Users().AddUser(&model.User{ID: id})
+	s.store.Users().AddUser(&model.User{IdTgbot: id})
 	return tgbotapi.NewMessage(id, constants.WelcomeMassage)
 }
 

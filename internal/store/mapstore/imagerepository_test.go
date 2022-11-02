@@ -1,9 +1,9 @@
 package mapstore
 
 import (
+	"github.com/Kirillznkv/tarot-cards-tgbot/internal/model"
+	"github.com/Kirillznkv/tarot-cards-tgbot/internal/store"
 	"github.com/stretchr/testify/assert"
-	"tarot-cards-tgbot/internal/model"
-	"tarot-cards-tgbot/internal/store"
 	"testing"
 )
 
@@ -20,7 +20,7 @@ func TestImageRepository_AddImage(t *testing.T) {
 
 func TestImageRepository_Find(t *testing.T) {
 	s := New()
-	img, ok := s.Images().Find("home")
+	img, ok := s.Images().FindByName("home")
 	assert.Nil(t, img)
 	assert.Equal(t, ok, false)
 
@@ -30,7 +30,7 @@ func TestImageRepository_Find(t *testing.T) {
 		Description: "Love home!",
 	}
 	s.Images().AddImage(testImage)
-	img, ok = s.Images().Find("home")
+	img, ok = s.Images().FindByName("home")
 	assert.Equal(t, img, testImage)
 	assert.Equal(t, ok, true)
 }

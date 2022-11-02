@@ -1,4 +1,4 @@
-module tarot-cards-tgbot
+module github.com/Kirillznkv/tarot-cards-tgbot
 
 go 1.18
 
