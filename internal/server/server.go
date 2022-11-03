@@ -15,6 +15,12 @@ type Server struct {
 	store  store.Store
 }
 
+type ChatConfigWithUser struct {
+	ChatID             int64
+	SuperGroupUsername string
+	UserID             int64
+}
+
 func New(store store.Store) (*Server, error) {
 	s := &Server{
 		logger: logrus.New(),
@@ -48,6 +54,17 @@ func (s *Server) Start() {
 
 		id := update.Message.Chat.ID
 		name := update.Message.From.UserName
+		config := tgbotapi.ChatConfigWithUser{
+			ChatID: constants.ChannelId,
+			UserID: int(id),
+		}
+
+		a, err := s.bot.GetChatMember(config)
+		if err != nil || a.Status == "left" {
+			s.bot.Send(s.buildRegistrationMassage(id))
+			continue
+		}
+
 		_, ok := s.store.Users().FindByTgID(id)
 		if !ok {
 			msg = s.buildWelcomeMassage(id, name)
@@ -62,6 +79,12 @@ func (s *Server) Start() {
 		}
 		s.logRequest(id, name, update.Message.Text)
 	}
+}
+
+func (s *Server) buildRegistrationMassage(id int64) tgbotapi.Chattable {
+	msg := tgbotapi.NewMessage(id, constants.RegistrationMassage)
+	msg.ParseMode = "HTML"
+	return msg
 }
 
 func (s *Server) buildWelcomeMassage(id int64, name string) tgbotapi.Chattable {
