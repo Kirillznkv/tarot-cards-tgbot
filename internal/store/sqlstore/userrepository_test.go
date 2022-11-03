@@ -11,7 +11,7 @@ func TestUserRepository_AddUser(t *testing.T) {
 	defer teardown("users")
 
 	s := New(db)
-	u := &model.User{IdTgbot: 1}
+	u := &model.User{IdChat: 1}
 	assert.NoError(t, s.Users().AddUser(u))
 	assert.Error(t, s.Users().AddUser(u))
 }
@@ -25,7 +25,7 @@ func TestUserRepository_Find(t *testing.T) {
 	assert.Nil(t, u)
 	assert.Equal(t, ok, false)
 
-	testUser := &model.User{IdTgbot: 1}
+	testUser := &model.User{IdChat: 1}
 	assert.NoError(t, s.Users().AddUser(testUser))
 	u, ok = s.Users().FindByTgID(1)
 	assert.Equal(t, u, testUser)

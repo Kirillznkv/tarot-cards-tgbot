@@ -10,8 +10,9 @@ type UserRepository struct {
 
 func (r *UserRepository) AddUser(u *model.User) error {
 	if err := r.store.db.QueryRow(
-		"INSERT INTO users (id_tg) VALUES ($1) RETURNING id",
-		u.IdTgbot,
+		"INSERT INTO users (id_chat, name) VALUES ($1, $2) RETURNING id",
+		u.IdChat,
+		u.Name,
 	).Scan(&u.IdDatabase); err != nil {
 		return err
 	}
@@ -23,11 +24,12 @@ func (r *UserRepository) FindByTgID(id int64) (*model.User, bool) {
 	u := &model.User{}
 
 	if err := r.store.db.QueryRow(
-		"SELECT id, id_tg FROM users WHERE id_tg = $1",
+		"SELECT id, id_chat, name FROM users WHERE id_chat = $1",
 		id,
 	).Scan(
 		&u.IdDatabase,
-		&u.IdTgbot,
+		&u.IdChat,
+		&u.Name,
 	); err != nil {
 		return nil, false
 	}

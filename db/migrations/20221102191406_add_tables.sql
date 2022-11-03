@@ -3,7 +3,8 @@
 SELECT 'up SQL query';
 create table if not exists users (
     id bigserial not null primary key,
-    id_tg int8 not null unique
+    id_chat int8 not null unique,
+    name text
 );
 
 create table if not exists images (

@@ -47,11 +47,12 @@ func (s *Server) Start() {
 		var msg tgbotapi.Chattable
 
 		id := update.Message.Chat.ID
+		name := update.Message.From.UserName
 		_, ok := s.store.Users().FindByTgID(id)
 		if !ok {
-			msg = s.buildWelcomeMassage(id)
+			msg = s.buildWelcomeMassage(id, name)
 		} else {
-			msg = s.buildTarorMassage(id)
+			msg = s.buildTarotMassage(id)
 		}
 
 		if msg != nil {
@@ -59,16 +60,16 @@ func (s *Server) Start() {
 		} else {
 			s.error(id, errors.New("error send msg"))
 		}
-		s.logRequest(id, update.Message.Text)
+		s.logRequest(id, name, update.Message.Text)
 	}
 }
 
-func (s *Server) buildWelcomeMassage(id int64) tgbotapi.Chattable {
-	s.store.Users().AddUser(&model.User{IdTgbot: id})
+func (s *Server) buildWelcomeMassage(id int64, name string) tgbotapi.Chattable {
+	s.store.Users().AddUser(&model.User{IdChat: id, Name: name})
 	return tgbotapi.NewMessage(id, constants.WelcomeMassage)
 }
 
-func (s *Server) buildTarorMassage(id int64) tgbotapi.Chattable {
+func (s *Server) buildTarotMassage(id int64) tgbotapi.Chattable {
 	imgs, err := s.store.Images().RandomImages()
 	if err != nil {
 		return nil //need log
@@ -82,8 +83,8 @@ func (s *Server) buildTarorMassage(id int64) tgbotapi.Chattable {
 	return tgbotapi.NewMediaGroup(id, group.Images)
 }
 
-func (s *Server) logRequest(id int64, msg string) {
-	s.store.LogRequest(id, msg)
+func (s *Server) logRequest(id int64, name, msg string) {
+	s.store.LogRequest(id, name, msg)
 }
 
 func (s *Server) error(id int64, err error) {

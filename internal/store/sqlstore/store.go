@@ -37,7 +37,7 @@ func (s *Store) Images() store.ImageRepository {
 
 func (s *Store) Error(id int64, err error) {
 	s.db.QueryRow(
-		"INSERT INTO errors (id_tg, date, time, error) values ($1, $2, $3, $4)",
+		"INSERT INTO errors (id_chat, date, time, error) values ($1, $2, $3, $4)",
 		id,
 		time.Now().UTC(),
 		time.Now(),
@@ -45,10 +45,11 @@ func (s *Store) Error(id int64, err error) {
 	)
 }
 
-func (s *Store) LogRequest(id int64, msg string) {
+func (s *Store) LogRequest(id int64, name, msg string) {
 	s.db.QueryRow(
-		"INSERT INTO info (id_tg, date, time, request) values ($1, $2, $3, $4)",
+		"INSERT INTO info (id_chat, name, date, time, request) values ($1, $2, $3, $4, $5)",
 		id,
+		name,
 		time.Now().UTC(),
 		time.Now(),
 		msg,

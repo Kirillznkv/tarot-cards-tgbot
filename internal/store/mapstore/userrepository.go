@@ -11,12 +11,12 @@ type UserRepository struct {
 }
 
 func (r *UserRepository) AddUser(u *model.User) error {
-	_, ok := r.users[u.IdTgbot]
+	_, ok := r.users[u.IdChat]
 	if ok {
 		return store.ErrUserIdDuplicated
 	}
 
-	r.users[u.IdTgbot] = u
+	r.users[u.IdChat] = u
 	return nil
 }
 

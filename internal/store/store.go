@@ -4,5 +4,5 @@ type Store interface {
 	Images() ImageRepository
 	Users() UserRepository
 	Error(int64, error)
-	LogRequest(int64, string)
+	LogRequest(int64, string, string)
 }
