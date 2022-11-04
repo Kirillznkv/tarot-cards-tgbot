@@ -89,7 +89,10 @@ func (s *Server) buildRegistrationMassage(id int64) tgbotapi.Chattable {
 
 func (s *Server) buildWelcomeMassage(id int64, name string) tgbotapi.Chattable {
 	s.store.Users().AddUser(&model.User{IdChat: id, Name: name})
-	return tgbotapi.NewMessage(id, constants.WelcomeMassage)
+	msg := tgbotapi.NewPhotoUpload(id, constants.WelcomeImage)
+	msg.Caption = constants.WelcomeMassage
+	msg.ParseMode = "HTML"
+	return msg
 }
 
 func (s *Server) buildTarotMassage(id int64) tgbotapi.Chattable {
