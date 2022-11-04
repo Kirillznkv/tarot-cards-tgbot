@@ -6,6 +6,7 @@ import (
 	"github.com/Kirillznkv/tarot-cards-tgbot/internal/server"
 	"github.com/Kirillznkv/tarot-cards-tgbot/internal/store/sqlstore"
 	_ "github.com/lib/pq"
+	"time"
 )
 
 func main() {
@@ -26,6 +27,8 @@ func newDB(databaseURL string) (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	time.Sleep(1 * time.Second)
 
 	if err := db.Ping(); err != nil {
 		return nil, err

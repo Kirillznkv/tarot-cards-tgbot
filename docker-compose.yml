@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  golang:
+    depends_on:
+      - postgres
+    restart: always
+    container_name: golang
+    build: ./app
+    networks:
+      - tarot
+    env_file:
+      - app/.env
+
+  postgres:
+    restart: always
+    container_name: postgres
+    image: postgres
+    networks:
+      - tarot
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: kshanti
+      POSTGRES_PASSWORD: wtP9397k19Xk
+      POSTGRES_DB: tarot_bot
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - .:/var/lib/postgresql/data
+
+#volumes:
+#  postgres:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      o: bind
+#      device: /Users/kshanti/Desktop/tarot-cards-tgbot/db_store
+
+networks:
+  tarot:
+    driver: bridge
